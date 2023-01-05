@@ -12,7 +12,7 @@ def evaluate(X_batch_list, y_batch_list, model):
 
     def cross_entropy(y_pred_prob, y_batch):
         delta = 1e-7
-        return -np.sum(y_batch * np.log(y_pred_prob + delta)) / y_batch.shape[0]  # (체크)
+        return -np.sum(y_batch * np.log(y_pred_prob + delta))
 
     def classification(x):
         if x < 0.5:
@@ -33,5 +33,5 @@ def evaluate(X_batch_list, y_batch_list, model):
         cross_entropy_list.append(cross_entropy(y_pred_prob, y_batch))
 
     accuracy = np.mean(accuracy_list)
-    cross_entropy = np.mean(cross_entropy_list)
+    cross_entropy = np.sum(cross_entropy_list)
     return accuracy, cross_entropy

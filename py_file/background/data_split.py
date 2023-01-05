@@ -15,7 +15,7 @@ def divide_xy(df):
   return X, y
 
 # 학습/테스트 데이터 분리하기
-def train_test_divide(X, y, test_size=0.2):  # X: pandas dataframe, y: pandas series
+def train_test_divide(X, y, test_size=0.2):  # X: pandas dataframe, y: numpy array
   length = len(y)
   test_index = int(length * test_size)
 
