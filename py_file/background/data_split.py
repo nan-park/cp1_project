@@ -1,5 +1,22 @@
 import numpy as np
 
+def minMaxScaler(X, x_max, x_min):
+  X = X.copy()
+  for feature in x_max.keys():
+    X[feature] = (X[feature] - x_min[feature]) / (x_max[feature] - x_min[feature])
+  return X
+
+def normalization(X_train, X_test):
+  features = list(X_train.columns)
+  x_max = {}
+  x_min = {}
+  for feature in features:
+    x_max[feature] = X_train[feature].max()
+    x_min[feature] = X_train[feature].min()
+  X_train = minMaxScaler(X_train, x_max, x_min)
+  X_test = minMaxScaler(X_test, x_max, x_min)
+  return X_train, X_test
+
 # 학습/테스트 데이터 뒤섞기
 def df_shuffle(df):
   return df.sample(frac=1).reset_index(drop=True)
@@ -25,13 +42,16 @@ def train_test_divide(X, y, test_size=0.2):  # X: pandas dataframe, y: numpy arr
   X_train = X[test_index:]
   y_train = y[test_index:]
 
+  # train 데이터에 맞춰서 normalization(minMaxScaler 이용)
+  X_train, X_test = normalization(X_train, X_test)
+
   return X_train, y_train, X_test, y_test
 
 # 위의 함수 통합
 def train_test_split(df, shuffle=True, test_size=0.2):
   if shuffle:
     df = df_shuffle(df)
-  
+
   X, y = divide_xy(df)
   return train_test_divide(X, y, test_size=test_size)
 
@@ -48,3 +68,8 @@ def split_mini_batch(X, y): # train, test 들어올 예정
     X_batch_list.append(X[i:i+4]) # index: 0~4, 4~8, 8~12, ...
     y_batch_list.append(y[i:i+4])
   return X_batch_list, y_batch_list
+
+def train_test_mini_batch(X_train, y_train, X_test, y_test):
+  train_X_batch_list, train_y_batch_list = split_mini_batch(X_train, y_train) # train 데이터
+  test_X_batch_list, test_y_batch_list = split_mini_batch(X_test, y_test) # test 데이터
+  return train_X_batch_list, train_y_batch_list, test_X_batch_list, test_y_batch_list

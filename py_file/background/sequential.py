@@ -61,16 +61,20 @@ class Input(Layer): # 입력층
     def output(self):
         return self._X
 
+
+
 # Sequential([])에 Layer 쌓고 서로 연결되도록 하기. 가중치 초기화 가능해야 함
 class Sequential():
     def __init__(self, layer_list): # Layer들을 서로 링크드리스트로 연결. 처음과 끝 지정.
+        # layer가 없는 경우
         if len(layer_list)==0:
             self.head = None
             self.tail = None
+        # layer가 1개인 경우
         elif len(layer_list)==1:
             self.head = layer_list[0]
             self.tail = layer_list[0]
-        else:
+        else:   # layer가 2개 이상인 경우
             self.head = layer_list[0]
             iterator = self.head
             for layer in layer_list[1:-1]:
