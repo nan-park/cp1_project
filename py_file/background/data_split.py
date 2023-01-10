@@ -56,20 +56,20 @@ def train_test_split(df, shuffle=True, test_size=0.2):
   return train_test_divide(X, y, test_size=test_size)
 
 # 미니배치 설정
-def split_mini_batch(X, y): # train, test 들어올 예정
+def split_mini_batch(X, y, n): # train, test 들어올 예정
   # 4개씩 미니배치 설정. 나머지는 버리기
   length = len(y)
-  num = length // 4 # 미니배치 개수
+  num = length // n # 미니배치 개수
   X_batch_list = []
   y_batch_list = []
   for i in range(num):
-    i = i * 4
+    i = i * n
     # 비복원 추출. 데이터가 적기 때문에 겹치지 않는 게 나을 듯.
-    X_batch_list.append(X[i:i+4]) # index: 0~4, 4~8, 8~12, ...
-    y_batch_list.append(y[i:i+4])
+    X_batch_list.append(X[i:i+n]) # index: 0~4, 4~8, 8~12, ...
+    y_batch_list.append(y[i:i+n])
   return X_batch_list, y_batch_list
 
-def train_test_mini_batch(X_train, y_train, X_test, y_test):
-  train_X_batch_list, train_y_batch_list = split_mini_batch(X_train, y_train) # train 데이터
-  test_X_batch_list, test_y_batch_list = split_mini_batch(X_test, y_test) # test 데이터
+def train_test_mini_batch(X_train, y_train, X_test, y_test, n):
+  train_X_batch_list, train_y_batch_list = split_mini_batch(X_train, y_train, n) # train 데이터
+  test_X_batch_list, test_y_batch_list = split_mini_batch(X_test, y_test, n) # test 데이터
   return train_X_batch_list, train_y_batch_list, test_X_batch_list, test_y_batch_list
